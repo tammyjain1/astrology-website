@@ -1,117 +1,369 @@
-// ===============================
-// GREETING BASED ON CURRENT TIME
-// ===============================
+/* =========================================
+   ASTROLOGY WEBSITE
+   AI BOOKING ASSISTANT
+========================================= */
 
-function updateGreeting() {
-    const greetingElement = document.getElementById("greeting");
+const chatButton = document.querySelector(".chat-button");
+const chatBox = document.querySelector(".chat-box");
+const closeChat = document.querySelector("#closeChat");
+const chatBody = document.querySelector(".chat-body");
 
-    const currentHour = new Date().getHours();
 
-    if (currentHour >= 5 && currentHour < 12) {
-        greetingElement.textContent = "GOOD MORNING";
-    } 
-    else if (currentHour >= 12 && currentHour < 17) {
-        greetingElement.textContent = "GOOD AFTERNOON";
-    } 
-    else {
-        greetingElement.textContent = "GOOD EVENING";
-    }
+/* Open chatbot */
+
+if (chatButton) {
+    chatButton.addEventListener("click", () => {
+        chatBox.classList.add("active");
+    });
 }
 
-updateGreeting();
 
+/* Close chatbot */
 
-// ===============================
-// CHATBOT
-// ===============================
-
-const chatButton = document.getElementById("chatButton");
-const chatBox = document.getElementById("chatBox");
-const closeChat = document.getElementById("closeChat");
-
-chatButton.addEventListener("click", function () {
-    chatBox.classList.toggle("active");
-});
-
-closeChat.addEventListener("click", function () {
-    chatBox.classList.remove("active");
-});
-
-
-// ===============================
-// CLOSE CHAT WHEN CLICKING OUTSIDE
-// ===============================
-
-document.addEventListener("click", function (event) {
-
-    if (
-        !chatBox.contains(event.target) &&
-        !chatButton.contains(event.target)
-    ) {
+if (closeChat) {
+    closeChat.addEventListener("click", () => {
         chatBox.classList.remove("active");
+    });
+}
+
+
+/* Add message */
+
+function addMessage(text, type = "bot") {
+
+    const message = document.createElement("div");
+
+    message.className = `chat-message ${type}`;
+
+    message.innerHTML = text;
+
+    chatBody.appendChild(message);
+
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+
+/* Add options */
+
+function addOptions(options) {
+
+    const container = document.createElement("div");
+
+    container.className = "chat-options";
+
+    options.forEach(option => {
+
+        const button = document.createElement("button");
+
+        button.textContent = option.text;
+
+        button.addEventListener("click", () => {
+
+            addMessage(option.text, "user");
+
+            container.remove();
+
+            setTimeout(() => {
+                option.action();
+            }, 500);
+
+        });
+
+        container.appendChild(button);
+
+    });
+
+    chatBody.appendChild(container);
+
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+
+/* Start consultation */
+
+function startConsultation() {
+
+    addMessage(
+        "I'd love to help you book a consultation. ✨<br><br>What would you like guidance on?"
+    );
+
+    addOptions([
+
+        {
+            text: "❤️ Love & Relationships",
+            action: () => choosePlan("Love & Relationships")
+        },
+
+        {
+            text: "💼 Career & Business",
+            action: () => choosePlan("Career & Business")
+        },
+
+        {
+            text: "💰 Finance & Growth",
+            action: () => choosePlan("Finance & Growth")
+        },
+
+        {
+            text: "🔮 Complete Life Reading",
+            action: () => choosePlan("Complete Life Reading")
+        }
+
+    ]);
+}
+
+
+/* Choose plan */
+
+function choosePlan(topic) {
+
+    addMessage(
+        `Perfect. I'll help you with <strong>${topic}</strong>.<br><br>Which consultation would you prefer?`
+    );
+
+    addOptions([
+
+        {
+            text: "✨ Quick Guidance — ₹999",
+            action: () => chooseDate("Quick Guidance")
+        },
+
+        {
+            text: "🌙 Detailed Reading — ₹1,999",
+            action: () => chooseDate("Detailed Reading")
+        },
+
+        {
+            text: "🌟 Complete Consultation — ₹3,499",
+            action: () => chooseDate("Complete Consultation")
+        }
+
+    ]);
+}
+
+
+/* Choose date */
+
+function chooseDate(plan) {
+
+    addMessage(
+        `You've selected <strong>${plan}</strong>.<br><br>When would you like to speak with the astrologer?`
+    );
+
+    addOptions([
+
+        {
+            text: "Tomorrow",
+            action: () => chooseTime("Tomorrow")
+        },
+
+        {
+            text: "Day After Tomorrow",
+            action: () => chooseTime("Day After Tomorrow")
+        },
+
+        {
+            text: "Choose another date",
+            action: () => customDate()
+        }
+
+    ]);
+}
+
+
+/* Custom date */
+
+function customDate() {
+
+    addMessage(
+        "No problem. Please enter your preferred date in the format:<br><br><strong>DD / MM / YYYY</strong>"
+    );
+
+    showInput("Enter date", (value) => {
+
+        if (!value) return;
+
+        addMessage(value, "user");
+
+        setTimeout(() => {
+            chooseTime(value);
+        }, 500);
+
+    });
+}
+
+
+/* Choose time */
+
+function chooseTime(date) {
+
+    addMessage(
+        `Great. <strong>${date}</strong> works.<br><br>Choose a convenient time:`
+    );
+
+    addOptions([
+
+        {
+            text: "10:00 AM",
+            action: () => confirmBooking(date, "10:00 AM")
+        },
+
+        {
+            text: "1:00 PM",
+            action: () => confirmBooking(date, "1:00 PM")
+        },
+
+        {
+            text: "5:00 PM",
+            action: () => confirmBooking(date, "5:00 PM")
+        },
+
+        {
+            text: "7:00 PM",
+            action: () => confirmBooking(date, "7:00 PM")
+        }
+
+    ]);
+}
+
+
+/* Confirmation */
+
+function confirmBooking(date, time) {
+
+    addMessage(
+        `Excellent. ✨<br><br>
+        Your preferred consultation time is:<br>
+        <strong>${date} at ${time}</strong><br><br>
+        May I have your name to complete the request?`
+    );
+
+    showInput("Your name", (name) => {
+
+        if (!name) return;
+
+        addMessage(name, "user");
+
+        setTimeout(() => {
+
+            addMessage(
+                `Thank you, <strong>${name}</strong>. 🌙<br><br>
+                Your consultation request has been prepared successfully.<br><br>
+                <span class="booking-success">
+                ✦ Booking Request Ready
+                </span><br><br>
+                Our astrologer will contact you to confirm the appointment.`
+            );
+
+        }, 700);
+
+    });
+}
+
+
+/* Input */
+
+function showInput(placeholder, callback) {
+
+    const inputArea = document.createElement("div");
+
+    inputArea.className = "chat-input-area";
+
+    inputArea.innerHTML = `
+        <input
+            type="text"
+            placeholder="${placeholder}"
+            autocomplete="off"
+        >
+        <button>Send</button>
+    `;
+
+    chatBody.appendChild(inputArea);
+
+    const input = inputArea.querySelector("input");
+    const button = inputArea.querySelector("button");
+
+    input.focus();
+
+    function submit() {
+
+        const value = input.value.trim();
+
+        if (!value) return;
+
+        inputArea.remove();
+
+        callback(value);
+
     }
 
-});
+    button.addEventListener("click", submit);
 
+    input.addEventListener("keydown", (event) => {
 
-// ===============================
-// CHAT OPTION INTERACTION
-// ===============================
-
-const chatOptions = document.querySelectorAll(".chat-body button");
-
-chatOptions.forEach(function (button) {
-
-    button.addEventListener("click", function () {
-
-        const selectedOption = button.textContent;
-
-        alert(
-            "You selected: " +
-            selectedOption +
-            "\n\nOur assistant will help you choose the right consultation."
-        );
+        if (event.key === "Enter") {
+            submit();
+        }
 
     });
 
-});
+}
 
 
-// ===============================
-// PLAN BUTTONS
-// ===============================
+/* Initial chatbot */
 
-const planButtons = document.querySelectorAll(".plan-card button");
+window.addEventListener("load", () => {
 
-planButtons.forEach(function (button) {
+    if (!chatBody) return;
 
-    button.addEventListener("click", function () {
+    setTimeout(() => {
 
-        alert(
-            "Booking system coming soon ✨\n\n" +
-            "You will soon be able to select your date and time."
+        addMessage(
+            "Hello ✨ I'm your astrology assistant.<br><br>I can help you explore consultations and book a session with our astrologer."
         );
 
-    });
+        addOptions([
 
-});
+            {
+                text: "🔮 Book a Consultation",
+                action: startConsultation
+            },
 
+            {
+                text: "🌙 Explore Astrology Plans",
+                action: () => {
 
-// ===============================
-// FADE IN WEBSITE
-// ===============================
+                    addMessage(
+                        "We offer personalised astrology consultations designed around your questions and goals."
+                    );
 
-window.addEventListener("load", function () {
+                    addOptions([
 
-    const website = document.getElementById("website");
+                        {
+                            text: "View Plans",
+                            action: () => {
 
-    website.style.opacity = "0";
+                                document
+                                    .querySelector("#plans")
+                                    ?.scrollIntoView({
+                                        behavior: "smooth"
+                                    });
 
-    setTimeout(function () {
+                            }
+                        },
 
-        website.style.transition = "opacity 1.5s ease";
-        website.style.opacity = "1";
+                        {
+                            text: "Book a Consultation",
+                            action: startConsultation
+                        }
 
-    }, 500);
+                    ]);
+
+                }
+            }
+
+        ]);
+
+    }, 3500);
 
 });
