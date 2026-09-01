@@ -87,7 +87,7 @@
                 <div class="earth-glow"></div>
 
                 <div class="earth">
-                   <img src="earth.png" alt="Earth">
+                    <img src="earth.png" alt="Earth">
                 </div>
 
                 <div class="orbit orbit-one"></div>
@@ -104,10 +104,12 @@
             <div class="about-image">
 
                 <div class="image-frame">
+
                     <div class="placeholder-image">
                         ASTROLOGER<br>
                         PHOTO
                     </div>
+
                 </div>
 
             </div>
@@ -182,7 +184,7 @@
                     </p>
 
                     <div class="price">
-                        ₹XXX
+                        ₹999
                     </div>
 
                     <button>
@@ -212,7 +214,7 @@
                     </p>
 
                     <div class="price">
-                        ₹XXX
+                        ₹1,999
                     </div>
 
                     <button>
@@ -238,7 +240,7 @@
                     </p>
 
                     <div class="price">
-                        ₹XXX
+                        ₹3,499
                     </div>
 
                     <button>
@@ -379,33 +381,46 @@
         </footer>
 
 
-        <!-- AI CHAT BUTTON -->
-        <button class="chat-button" id="chatButton">
+        <!-- ============================= -->
+        <!-- AI ASTROLOGY CHATBOT -->
+        <!-- ============================= -->
+
+        <button
+            class="chat-button"
+            id="chatButton"
+            aria-label="Open astrology assistant">
             ✦
         </button>
+
 
         <div class="chat-box" id="chatBox">
 
             <div class="chat-header">
-                <strong>Ask Astro</strong>
-                <button id="closeChat">×</button>
+
+                <div>
+                    <strong>Astro Guide</strong>
+                    <small>AI Booking Assistant</small>
+                </div>
+
+                <button
+                    id="closeChat"
+                    aria-label="Close">
+                    ×
+                </button>
+
             </div>
 
+
+            <div class="chat-status">
+
+                <span></span>
+
+                Online • Ready to help
+
+            </div>
+
+
             <div class="chat-body">
-
-                <p>
-                    Hi ✨ I'm here to help you
-                    find the right consultation.
-                </p>
-
-                <p>
-                    What would you like guidance on?
-                </p>
-
-                <button>💞 Love & Relationships</button>
-                <button>💼 Career</button>
-                <button>💰 Finance</button>
-                <button>🌙 Life & Future</button>
 
             </div>
 
@@ -414,40 +429,9 @@
     </main>
 
 
+    <!-- IMPORTANT:
+         SCRIPT MUST BE AT THE VERY END -->
     <script src="script.js"></script>
 
-    
-<!-- AI ASTROLOGY CHATBOT -->
-
-<button class="chat-button" aria-label="Open astrology assistant">
-    ✦
-</button>
-
-<div class="chat-box">
-
-    <div class="chat-header">
-
-        <div>
-            <strong>Astro Guide</strong>
-            <small>AI Booking Assistant</small>
-        </div>
-
-        <button id="closeChat" aria-label="Close">
-            ×
-        </button>
-
-    </div>
-
-    <div class="chat-status">
-        <span></span>
-        Online • Ready to help
-    </div>
-
-    <div class="chat-body">
-    </div>
-
-</div>
-
-
 </body>
-</html>
+</html>cx
