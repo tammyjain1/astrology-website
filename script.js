@@ -9,27 +9,39 @@ const closeChat = document.querySelector("#closeChat");
 const chatBody = document.querySelector(".chat-body");
 
 
-/* Open chatbot */
+/* =========================================
+   OPEN CHATBOT
+========================================= */
 
-if (chatButton) {
+if (chatButton && chatBox) {
     chatButton.addEventListener("click", () => {
         chatBox.classList.add("active");
+
+        if (chatBody && chatBody.children.length === 0) {
+            startChat();
+        }
     });
 }
 
 
-/* Close chatbot */
+/* =========================================
+   CLOSE CHATBOT
+========================================= */
 
-if (closeChat) {
+if (closeChat && chatBox) {
     closeChat.addEventListener("click", () => {
         chatBox.classList.remove("active");
     });
 }
 
 
-/* Add message */
+/* =========================================
+   ADD MESSAGE
+========================================= */
 
 function addMessage(text, type = "bot") {
+
+    if (!chatBody) return;
 
     const message = document.createElement("div");
 
@@ -43,9 +55,13 @@ function addMessage(text, type = "bot") {
 }
 
 
-/* Add options */
+/* =========================================
+   ADD BUTTON OPTIONS
+========================================= */
 
 function addOptions(options) {
+
+    if (!chatBody) return;
 
     const container = document.createElement("div");
 
@@ -54,6 +70,8 @@ function addOptions(options) {
     options.forEach(option => {
 
         const button = document.createElement("button");
+
+        button.type = "button";
 
         button.textContent = option.text;
 
@@ -65,7 +83,7 @@ function addOptions(options) {
 
             setTimeout(() => {
                 option.action();
-            }, 500);
+            }, 400);
 
         });
 
@@ -79,12 +97,47 @@ function addOptions(options) {
 }
 
 
-/* Start consultation */
+/* =========================================
+   START CHAT
+========================================= */
+
+function startChat() {
+
+    addMessage(
+        "Hello ✨ I'm your astrology assistant.<br><br>" +
+        "I can help you explore our astrology plans or book a personal consultation with our astrologer."
+    );
+
+    addOptions([
+
+        {
+            text: "🔮 Book a Consultation",
+            action: startConsultation
+        },
+
+        {
+            text: "🌙 Explore Astrology Plans",
+            action: explorePlans
+        },
+
+        {
+            text: "✨ Tell Me About Astrology",
+            action: aboutAstrology
+        }
+
+    ]);
+}
+
+
+/* =========================================
+   CONSULTATION
+========================================= */
 
 function startConsultation() {
 
     addMessage(
-        "I'd love to help you book a consultation. ✨<br><br>What would you like guidance on?"
+        "I'd love to help you book a consultation. ✨<br><br>" +
+        "What would you like guidance on?"
     );
 
     addOptions([
@@ -113,12 +166,15 @@ function startConsultation() {
 }
 
 
-/* Choose plan */
+/* =========================================
+   CHOOSE PLAN
+========================================= */
 
 function choosePlan(topic) {
 
     addMessage(
-        `Perfect. I'll help you with <strong>${topic}</strong>.<br><br>Which consultation would you prefer?`
+        `Perfect. I'll help you with <strong>${topic}</strong>.<br><br>` +
+        "Which consultation would you prefer?"
     );
 
     addOptions([
@@ -142,12 +198,15 @@ function choosePlan(topic) {
 }
 
 
-/* Choose date */
+/* =========================================
+   CHOOSE DATE
+========================================= */
 
 function chooseDate(plan) {
 
     addMessage(
-        `You've selected <strong>${plan}</strong>.<br><br>When would you like to speak with the astrologer?`
+        `You've selected <strong>${plan}</strong>.<br><br>` +
+        "When would you like to speak with the astrologer?"
     );
 
     addOptions([
@@ -163,25 +222,27 @@ function chooseDate(plan) {
         },
 
         {
-            text: "Choose another date",
-            action: () => customDate()
+            text: "Choose Another Date",
+            action: customDate
         }
 
     ]);
 }
 
 
-/* Custom date */
+/* =========================================
+   CUSTOM DATE
+========================================= */
 
 function customDate() {
 
     addMessage(
-        "No problem. Please enter your preferred date in the format:<br><br><strong>DD / MM / YYYY</strong>"
+        "No problem ✨<br><br>" +
+        "Please enter your preferred date.<br><br>" +
+        "<strong>DD / MM / YYYY</strong>"
     );
 
     showInput("Enter date", (value) => {
-
-        if (!value) return;
 
         addMessage(value, "user");
 
@@ -193,12 +254,15 @@ function customDate() {
 }
 
 
-/* Choose time */
+/* =========================================
+   CHOOSE TIME
+========================================= */
 
 function chooseTime(date) {
 
     addMessage(
-        `Great. <strong>${date}</strong> works.<br><br>Choose a convenient time:`
+        `Great. <strong>${date}</strong> works. ✨<br><br>` +
+        "Choose a convenient time:"
     );
 
     addOptions([
@@ -227,33 +291,45 @@ function chooseTime(date) {
 }
 
 
-/* Confirmation */
+/* =========================================
+   CONFIRM BOOKING
+========================================= */
 
 function confirmBooking(date, time) {
 
     addMessage(
-        `Excellent. ✨<br><br>
-        Your preferred consultation time is:<br>
-        <strong>${date} at ${time}</strong><br><br>
-        May I have your name to complete the request?`
+        `Excellent. ✨<br><br>` +
+        `Your preferred consultation time is:<br>` +
+        `<strong>${date} at ${time}</strong><br><br>` +
+        "May I have your name to complete the request?"
     );
 
     showInput("Your name", (name) => {
-
-        if (!name) return;
 
         addMessage(name, "user");
 
         setTimeout(() => {
 
             addMessage(
-                `Thank you, <strong>${name}</strong>. 🌙<br><br>
-                Your consultation request has been prepared successfully.<br><br>
-                <span class="booking-success">
-                ✦ Booking Request Ready
-                </span><br><br>
-                Our astrologer will contact you to confirm the appointment.`
+                `Thank you, <strong>${name}</strong>. 🌙<br><br>` +
+                "Your consultation request has been prepared successfully.<br><br>" +
+                `<span class="booking-success">✦ Booking Request Ready</span><br><br>` +
+                "Our astrologer will contact you to confirm the appointment."
             );
+
+            addOptions([
+
+                {
+                    text: "📅 Explore Plans",
+                    action: explorePlans
+                },
+
+                {
+                    text: "🔮 Start Again",
+                    action: restartChat
+                }
+
+            ]);
 
         }, 700);
 
@@ -261,9 +337,81 @@ function confirmBooking(date, time) {
 }
 
 
-/* Input */
+/* =========================================
+   ASTROLOGY INFORMATION
+========================================= */
+
+function aboutAstrology() {
+
+    addMessage(
+        "Astrology is a traditional system that explores the relationship " +
+        "between celestial movements and different areas of life. ✨<br><br>" +
+        "Our consultations are designed to provide personalised guidance " +
+        "around relationships, career, finance and life decisions."
+    );
+
+    addOptions([
+
+        {
+            text: "🔮 Book a Consultation",
+            action: startConsultation
+        },
+
+        {
+            text: "🌙 Explore Plans",
+            action: explorePlans
+        }
+
+    ]);
+}
+
+
+/* =========================================
+   EXPLORE PLANS
+========================================= */
+
+function explorePlans() {
+
+    addMessage(
+        "We offer personalised astrology consultations designed around " +
+        "your questions, concerns and goals. ✨"
+    );
+
+    addOptions([
+
+        {
+            text: "View Plans",
+            action: () => {
+
+                const plansSection = document.querySelector("#plans");
+
+                if (plansSection) {
+
+                    plansSection.scrollIntoView({
+                        behavior: "smooth"
+                    });
+
+                }
+
+            }
+        },
+
+        {
+            text: "🔮 Book a Consultation",
+            action: startConsultation
+        }
+
+    ]);
+}
+
+
+/* =========================================
+   INPUT BOX
+========================================= */
 
 function showInput(placeholder, callback) {
+
+    if (!chatBody) return;
 
     const inputArea = document.createElement("div");
 
@@ -275,7 +423,7 @@ function showInput(placeholder, callback) {
             placeholder="${placeholder}"
             autocomplete="off"
         >
-        <button>Send</button>
+        <button type="button">Send</button>
     `;
 
     chatBody.appendChild(inputArea);
@@ -306,64 +454,30 @@ function showInput(placeholder, callback) {
         }
 
     });
-
 }
 
 
-/* Initial chatbot */
+/* =========================================
+   RESTART CHAT
+========================================= */
 
-window.addEventListener("load", () => {
+function restartChat() {
 
     if (!chatBody) return;
 
+    chatBody.innerHTML = "";
+
     setTimeout(() => {
+        startChat();
+    }, 300);
+}
 
-        addMessage(
-            "Hello ✨ I'm your astrology assistant.<br><br>I can help you explore consultations and book a session with our astrologer."
-        );
 
-        addOptions([
+/* =========================================
+   NO AUTOMATIC POPUP
+========================================= */
 
-            {
-                text: "🔮 Book a Consultation",
-                action: startConsultation
-            },
-
-            {
-                text: "🌙 Explore Astrology Plans",
-                action: () => {
-
-                    addMessage(
-                        "We offer personalised astrology consultations designed around your questions and goals."
-                    );
-
-                    addOptions([
-
-                        {
-                            text: "View Plans",
-                            action: () => {
-
-                                document
-                                    .querySelector("#plans")
-                                    ?.scrollIntoView({
-                                        behavior: "smooth"
-                                    });
-
-                            }
-                        },
-
-                        {
-                            text: "Book a Consultation",
-                            action: startConsultation
-                        }
-
-                    ]);
-
-                }
-            }
-
-        ]);
-
-    }, 3500);
-
-});
+/*
+   Chatbot does NOT open automatically.
+   User opens it by clicking the ✦ button.
+*/
